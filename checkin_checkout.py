@@ -1,5 +1,6 @@
 import cv2
 import queryDB as db
+import time
 from tkinter import messagebox
 
 def show_interface(mode):
@@ -9,6 +10,7 @@ def show_interface(mode):
     detector = cv2.CascadeClassifier('libs/haarcascade_frontalface_default.xml')
 
     checked_in = False
+    face_match_start = None  # Biến để theo dõi thời gian bắt đầu nhận diện khuôn mặt
 
     while True:
         ret, img = cam.read()
@@ -21,25 +23,40 @@ def show_interface(mode):
 
             if confidence < 40:
                 profile = db.getProfile(id)
-                if profile and not checked_in:
-                    action = "Check-in" if mode == "checkin" else "Check-out"
-                    cv2.putText(img, f"{action}: {profile[1]}", (x, y+h+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
-                    if mode == "checkin":
-                        db.checkIn(id)
-                    else:
-                        db.checkOut(id)
+                if profile:
+                    # Nếu phát hiện khuôn mặt, bắt đầu đếm thời gian
+                    if face_match_start is None:
+                        face_match_start = time.time()
 
-                    messagebox.showinfo("Success", f"{action} thành công cho {profile[1]}")
-                    checked_in = True
+                    # Tính thời gian đã nhận diện đúng khuôn mặt
+                    elapsed_time = time.time() - face_match_start
 
-                    cam.release()
-                    cv2.destroyAllWindows()
-                    return
+                    # cv2.putText(img, f"{profile[1]} ({elapsed_time:.1f}s)", (x, y+h+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                    cv2.putText(img, f"{profile[1]}", (x, y+h+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                    # Nếu nhận diện khuôn mặt liên tục trong 3 giây
+                    if elapsed_time >= 3 and not checked_in:
+                        action = "Check-in" if mode == "checkin" else "Check-out"
+                        cv2.putText(img, f"{action}: {profile[1]}", (x, y+h+60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+
+                        if mode == "checkin":
+                            db.checkIn(id)
+                        else:
+                            db.checkOut(id)
+
+                        messagebox.showinfo("Success", f"{action} thành công cho {profile[1]}")
+                        checked_in = True
+                        cam.release()
+                        cv2.destroyAllWindows()
+                        return
+                else:
+                    face_match_start = None  # Reset thời gian nếu không nhận diện đúng
             else:
                 cv2.putText(img, "Unknown", (x, y+h+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                face_match_start = None  # Reset thời gian khi nhận diện không thành công
 
         cv2.imshow(f'{mode.capitalize()}', img)
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
