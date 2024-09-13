@@ -4,7 +4,7 @@ import cv2
 import os
 import numpy as np
 import tkinter as tk
-from tkinter import ttk  # Sử dụng ttk để truy cập Treeview
+from tkinter import ttk 
 
 def check_login(username, password):
     return db.check_admin_credentials(username, password)
@@ -107,26 +107,22 @@ def train_model():
     faces = []
     ids = []
 
-    # Duyệt qua tất cả ảnh trong thư mục dataSet
     for image in os.listdir('dataSet'):
         img_path = os.path.join('dataSet', image)
         img = cv2.imread(img_path)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        user_id = int(image.split('.')[1])  # Lấy ID từ tên file
+        user_id = int(image.split('.')[1])
         
         faces.append(gray)
         ids.append(user_id)
 
-    # Huấn luyện mô hình với dữ liệu khuôn mặt và ID người dùng
     recognizer.train(faces, np.array(ids))
 
-    # Lưu mô hình đã huấn luyện vào tệp
     recognizer.save('recognizer/trainningData.yml')
     print("Huấn luyện mô hình thành công!")
 
 
 def show_people():
-    # Lấy danh sách người dùng từ cơ sở dữ liệu
     people_data = db.get_people()
 
     people_window = tk.Toplevel()
@@ -134,7 +130,7 @@ def show_people():
     people_window.geometry("600x400")
 
     columns = ('ID', 'Tên')
-    tree = ttk.Treeview(people_window, columns=columns, show='headings')  # Sử dụng ttk.Treeview
+    tree = ttk.Treeview(people_window, columns=columns, show='headings')
     
     tree.heading('ID', text='ID')
     tree.heading('Tên', text='Tên')
@@ -144,7 +140,6 @@ def show_people():
 
     tree.pack(expand=True, fill='both')
 
-    # Nếu không có dữ liệu, hiển thị một nhãn thông báo
     if not people_data:
         no_data_label = tk.Label(people_window, text="Không có dữ liệu người dùng.")
         no_data_label.pack()
@@ -152,5 +147,35 @@ def show_people():
         for entry in people_data:
             tree.insert('', tk.END, values=(entry[0], entry[1]))
 
-    # Đặt chiều cao của cây (tree) để có thể hiển thị tốt hơn
     tree.bind("<Configure>", lambda e: tree.configure(height=min(len(people_data), 10)))
+
+def show_history():
+    history_data = db.get_history()
+
+    history_window = tk.Toplevel()
+    history_window.title("Lịch sử Checkin/Checkout")
+    history_window.geometry("600x400")
+
+    columns = ('ID', 'Tên', 'Thời gian', 'Hành động')
+    tree = ttk.Treeview(history_window, columns=columns, show='headings')
+    
+    tree.heading('ID', text='ID')
+    tree.heading('Tên', text='Tên')
+    tree.heading('Thời gian', text='Thời gian')
+    tree.heading('Hành động', text='Hành động')
+
+    tree.column('ID', width=50)
+    tree.column('Tên', width=150)
+    tree.column('Thời gian', width=200)
+    tree.column('Hành động', width=100)
+
+    tree.pack(expand=True, fill='both')
+
+    if not history_data:
+        no_data_label = tk.Label(history_window, text="Không có dữ liệu lịch sử.")
+        no_data_label.pack()
+    else:
+        for entry in history_data:
+            tree.insert('', tk.END, values=(entry[0], entry[1], entry[2], entry[3]))
+
+    tree.bind("<Configure>", lambda e: tree.configure(height=min(len(history_data), 10)))

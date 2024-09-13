@@ -13,7 +13,7 @@ def checkIn(user_id):
     conn = mysql.connector.connect(host="localhost", user="root", password="Huynhduc1220", database="faceid")
     cursor = conn.cursor()
     query = "INSERT INTO attendance (user_id, action) VALUES (%s, 'check-in')"
-    cursor.execute(query, (user_id,))
+    cursor.execute(query, [user_id])
     conn.commit()
     conn.close()
 
@@ -22,18 +22,8 @@ def checkOut(user_id):
     conn = mysql.connector.connect(host="localhost", user="root", password="Huynhduc1220", database="faceid")
     cursor = conn.cursor()
     
-    # Cập nhật thời gian check-out cho người dùng
-    query = """
-    UPDATE attendance
-    SET action = 'check-out'
-    WHERE user_id = %s
-    AND action = 'check-in'
-    AND timestamp = (
-        SELECT MAX(timestamp)
-        FROM (SELECT * FROM attendance WHERE user_id = %s AND action = 'check-in') AS temp
-    )
-    """
-    cursor.execute(query, (user_id, user_id))
+    query = "INSERT INTO attendance (user_id, action) VALUES (%s, 'check-out')"
+    cursor.execute(query, [user_id])
     conn.commit()
     conn.close()
 
@@ -51,14 +41,12 @@ def insert(name):
     conn = mysql.connector.connect(host="localhost", user="root", password="Huynhduc1220", database="faceid")
     cursor = conn.cursor()
     
-    # Kiểm tra xem người dùng đã tồn tại chưa
     cursor.execute("SELECT * FROM people WHERE name = %s", (name,))
     profile = cursor.fetchone()
 
     if profile:
-        return profile[0]  # Trả về ID nếu đã tồn tại
+        return profile[0] 
     else:
-        # Thêm mới nếu không có
         cursor.execute("INSERT INTO people (name) VALUES (%s)", (name,))
         conn.commit()
         return cursor.lastrowid
@@ -67,7 +55,6 @@ def deleteUser(user_id):
     conn = mysql.connector.connect(host="localhost", user="root", password="Huynhduc1220", database="faceid")
     cursor = conn.cursor()
     
-    # Xóa người dùng và lịch sử check-in/check-out
     cursor.execute("DELETE FROM attendance WHERE user_id = %s", (user_id,))
     cursor.execute("DELETE FROM people WHERE id = %s", (user_id,))
     
@@ -87,7 +74,6 @@ def get_history():
     conn = mysql.connector.connect(host="localhost", user="root", password="Huynhduc1220", database="faceid")
     cursor = conn.cursor()
     
-    # Truy vấn lấy dữ liệu lịch sử check-in, check-out
     query = """
     SELECT attendance.user_id, people.name, attendance.timestamp, attendance.action 
     FROM attendance 
