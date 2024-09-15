@@ -26,33 +26,33 @@ def login():
 
     login_btn = tk.Button(login_window, text="Đăng nhập", command=process_login)
 
-    username_label.pack()
-    username_entry.pack()
-    password_label.pack()
-    password_entry.pack()
-    login_btn.pack()
+    username_label.pack(pady=5)
+    username_entry.pack(padx=10)
+    password_label.pack(pady=5)
+    password_entry.pack(padx=10)
+    login_btn.pack(pady=10)
 
 def show_admin_menu():
     admin_window = tk.Toplevel(root)
     admin_window.title("Admin")
     
-    add_btn = tk.Button(admin_window, text="Thêm khuôn mặt", command=admin.add_face)
-    delete_btn = tk.Button(admin_window, text="Xóa khuôn mặt", command=admin.delete_face)
-    train_btn = tk.Button(admin_window, text="Huấn luyện mô hình", command=admin.train_model)
-    view_history_btn = tk.Button(admin_window,text="Lịch sử",command=admin.show_history)
-    view_people_btn = tk.Button(admin_window, text="Xem danh sách người dùng", command=admin.show_people)
+    add_btn = tk.Button(admin_window, text="Thêm khuôn mặt", command=admin.add_face,width=20,height=2)
+    delete_btn = tk.Button(admin_window, text="Xóa khuôn mặt", command=admin.delete_face,width=20,height=2)
+    train_btn = tk.Button(admin_window, text="Huấn luyện mô hình", command=admin.train_model,width=20,height=2)
+    view_history_btn = tk.Button(admin_window,text="Lịch sử checkin/checkout",command=admin.show_history,width=20,height=2)
+    view_people_btn = tk.Button(admin_window, text="Xem danh sách người dùng", command=admin.show_people,width=20,height=2)
 
-    add_btn.pack(pady=10)
-    delete_btn.pack(pady=10)
-    train_btn.pack(pady=10)
-    view_history_btn.pack(pady=10)
-    view_people_btn.pack(pady=10) 
+    add_btn.pack(padx=10,pady=10)
+    delete_btn.pack(padx=10,pady=10)
+    train_btn.pack(padx=10,pady=10)
+    view_history_btn.pack(padx=10,pady=10)
+    view_people_btn.pack(padx=10,pady=10) 
 
 def show_checkin():
-    checkin_checkout.show_interface("checkin (press q to exit)")
+    checkin_checkout.show_interface("checkin")
 
 def show_checkout():
-    checkin_checkout.show_interface("checkout (press q to exit)")
+    checkin_checkout.show_interface("checkout")
 
 
 

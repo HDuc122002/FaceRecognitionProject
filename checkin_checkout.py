@@ -35,7 +35,8 @@ def show_interface(mode):
                     cv2.putText(img, f"{profile[1]}", (x, y+h+30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
                     # Nếu nhận diện khuôn mặt liên tục trong 3 giây
                     if elapsed_time >= 3 and not checked_in:
-                        action = "Check-in" if mode == "checkin" else "Check-out"
+                        # action = "Check-in" if mode == "checkin" else "Check-out"
+                        action = "Check-in" if "checkin" in mode.lower() else "Check-out"
                         cv2.putText(img, f"{action}: {profile[1]}", (x, y+h+60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
                         if mode == "checkin":

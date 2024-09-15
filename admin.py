@@ -38,7 +38,7 @@ def add_face():
                     cv2.imwrite(f"dataSet/User.{user_id}.{sampleNum}.jpg", gray[y:y+h, x:x+w])
                     cv2.imshow('image', img)
 
-                if cv2.waitKey(1) & 0xFF == ord('q') or sampleNum >= 30: 
+                if cv2.waitKey(1) & 0xFF == ord('q') or sampleNum >= 100: 
                     break
 
             cam.release()
@@ -56,8 +56,8 @@ def add_face():
 
     name_label.pack(pady=5)
     name_entry.pack(pady=5)
-    submit_btn.pack(pady=5)
-    cancel_btn.pack(pady=5)
+    submit_btn.pack(side="left",padx=20,pady=5)
+    cancel_btn.pack(side="left",padx=20,pady=5)
 
 
 def delete_face():
@@ -91,15 +91,15 @@ def delete_face():
     delete_face_window = tk.Toplevel()
     delete_face_window.title("Xóa Khuôn Mặt")
 
-    name_label = tk.Label(delete_face_window, text="Nhập tên hoặc ID người dùng cần xóa:")
+    name_label = tk.Label(delete_face_window, text="Nhập ID hoặc tên người dùng cần xóa:")
     name_entry = tk.Entry(delete_face_window)
     submit_btn = tk.Button(delete_face_window, text="Xóa", command=submit_delete)
     cancel_btn = tk.Button(delete_face_window, text="Hủy", command=delete_face_window.destroy)
 
     name_label.pack(pady=5)
     name_entry.pack(pady=5)
-    submit_btn.pack(pady=5)
-    cancel_btn.pack(pady=5)
+    submit_btn.pack(side="left",padx=(55,0),pady=5)
+    cancel_btn.pack(side="left",padx=(30,0),pady=5)
 
 
 def train_model():
@@ -135,8 +135,8 @@ def show_people():
     tree.heading('ID', text='ID')
     tree.heading('Tên', text='Tên')
 
-    tree.column('ID', width=50)
-    tree.column('Tên', width=150)
+    tree.column('ID', width=50, anchor="center")
+    tree.column('Tên', width=150, anchor="center")
 
     tree.pack(expand=True, fill='both')
 
@@ -164,10 +164,10 @@ def show_history():
     tree.heading('Thời gian', text='Thời gian')
     tree.heading('Hành động', text='Hành động')
 
-    tree.column('ID', width=50)
-    tree.column('Tên', width=150)
-    tree.column('Thời gian', width=200)
-    tree.column('Hành động', width=100)
+    tree.column('ID', width=50,anchor="center")
+    tree.column('Tên', width=150,anchor="center")
+    tree.column('Thời gian', width=200,anchor="center")
+    tree.column('Hành động', width=100,anchor="center")
 
     tree.pack(expand=True, fill='both')
 
