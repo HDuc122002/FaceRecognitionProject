@@ -13,10 +13,8 @@ def add_face():
     def submit_name():
         name = name_entry.get()
         if name:
-            # Gọi hàm insert vào DB để thêm người dùng và lấy ID
             user_id = db.insert(name)
 
-            # Khởi tạo webcam
             cam = cv2.VideoCapture(0)
             cam.set(3, 1280)  # Chiều rộng
             cam.set(4, 720)   # Chiều cao
@@ -32,7 +30,6 @@ def add_face():
                 for (x, y, w, h) in faces:
                     cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
                     sampleNum += 1
-                    # Lưu hình ảnh khuôn mặt vào thư mục dataSet
                     if not os.path.exists('dataSet'):
                         os.makedirs('dataSet')
                     cv2.imwrite(f"dataSet/User.{user_id}.{sampleNum}.jpg", gray[y:y+h, x:x+w])
@@ -76,11 +73,9 @@ def delete_face():
                     messagebox.showerror("Lỗi", "Không tìm thấy người dùng.")
                     return
             
-            # Xóa file ảnh
             for image in images:
                 os.remove(os.path.join('dataSet', image))
             
-            # Xóa thông tin trong cơ sở dữ liệu
             db.deleteUser(user_id)
 
             messagebox.showinfo("Thành công", f"Đã xóa khuôn mặt của người dùng: {name_or_id}")
