@@ -115,6 +115,7 @@ def train_model():
 
     recognizer.save('recognizer/trainningData.yml')
     print("Huấn luyện mô hình thành công!")
+    messagebox.showinfo("Success","Huấn luyện mô hình thành công")
 
 
 def show_people():
