@@ -13,11 +13,16 @@ def add_face():
     def submit_name():
         name = name_entry.get()
         if name:
+            existing_user = db.getProfileByName(name)
+            if existing_user:
+                messagebox.showerror("Lỗi", "Người dùng này đã tồn tại.")
+                return
+
             user_id = db.insert(name)
 
             cam = cv2.VideoCapture(0)
-            cam.set(3, 1280)  # Chiều rộng
-            cam.set(4, 720)   # Chiều cao
+            cam.set(3, 1280)
+            cam.set(4, 720)  
 
             detector = cv2.CascadeClassifier('libs/haarcascade_frontalface_default.xml')
             sampleNum = 0
@@ -41,6 +46,9 @@ def add_face():
             cam.release()
             cv2.destroyAllWindows()
             print("Đã thêm khuôn mặt thành công!")
+
+            train_new_face(user_id)
+        
             add_face_window.destroy()
 
     add_face_window = tk.Toplevel()
@@ -53,8 +61,29 @@ def add_face():
 
     name_label.pack(pady=5)
     name_entry.pack(pady=5)
-    submit_btn.pack(side="left",padx=20,pady=5)
-    cancel_btn.pack(side="left",padx=20,pady=5)
+    submit_btn.pack(side="left", padx=20, pady=5)
+    cancel_btn.pack(side="left", padx=20, pady=5)
+
+def train_new_face(user_id):
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
+
+    if os.path.exists('recognizer/trainningData.yml'):
+        recognizer.read('recognizer/trainningData.yml')
+    
+    faces = []
+    ids = []
+
+    for image in os.listdir('dataSet'):
+        if image.startswith(f'User.{user_id}.'):
+            img_path = os.path.join('dataSet', image)
+            img = cv2.imread(img_path)
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            faces.append(gray)
+            ids.append(user_id)
+
+    recognizer.update(faces, np.array(ids))
+    
+    recognizer.save('recognizer/trainningData.yml')
 
 
 def delete_face():

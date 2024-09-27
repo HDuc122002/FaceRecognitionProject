@@ -50,21 +50,21 @@ def show_admin_menu():
 
     add_btn = tk.Button(frame, text="Thêm khuôn mặt", image=add_user_photo, compound="top", command=admin.add_face, width=120, height=120)
     delete_btn = tk.Button(frame, text="Xóa khuôn mặt", image=delete_user_photo, compound="top", command=admin.delete_face, width=120, height=120)
-    train_btn = tk.Button(frame, text="Huấn luyện mô hình",image=train_model_photo, compound="top", command=admin.train_model, width=120, height=120)
-    history_btn = tk.Button(frame, text="Lịch sử", image=history_photo, compound="top", command=admin.show_history, width=120, height=120)
-    list_user_btn = tk.Button(frame, text="Danh sách nhân viên", image=list_user_photo, compound="top", command=admin.show_people, width=120, height=120)
+    # train_btn = tk.Button(frame, text="Huấn luyện mô hình",image=train_model_photo, compound="top", command=admin.train_model, width=120, height=120)
+    # history_btn = tk.Button(frame, text="Lịch sử", image=history_photo, compound="top", command=admin.show_history, width=120, height=120)
+    # list_user_btn = tk.Button(frame, text="Danh sách nhân viên", image=list_user_photo, compound="top", command=admin.show_people, width=120, height=120)
 
     add_btn.image = add_user_photo
     delete_btn.image = delete_user_photo
-    train_btn.image = train_model_photo
-    history_btn.image = history_photo
-    list_user_btn.image = list_user_photo
+    # train_btn.image = train_model_photo
+    # history_btn.image = history_photo
+    # list_user_btn.image = list_user_photo
 
     add_btn.grid(row=0, column=0, padx=10, pady=10)
     delete_btn.grid(row=0, column=1, padx=10, pady=10)
-    train_btn.grid(row=0, column=2, padx=10, pady=10)
-    history_btn.grid(row=1, column=0, padx=10, pady=10)
-    list_user_btn.grid(row=1, column=1, padx=10, pady=10)
+    # train_btn.grid(row=0, column=2, padx=10, pady=10)
+    # history_btn.grid(row=1, column=0, padx=10, pady=10)
+    # list_user_btn.grid(row=1, column=1, padx=10, pady=10)
 
     admin_window.geometry("500x350")
 
@@ -98,13 +98,13 @@ checkout_image = Image.open("image/check-out.png")
 checkout_photo = ImageTk.PhotoImage(checkout_image)
 
 checkin_btn = tk.Button(frame, image=checkin_photo, text="Checkin", compound="top", width=200, height=200, command=show_checkin)
-checkout_btn = tk.Button(frame, image=checkout_photo, text="Checkout", compound="top", width=200, height=200, command=show_checkout)
+# checkout_btn = tk.Button(frame, image=checkout_photo, text="Checkout", compound="top", width=200, height=200, command=show_checkout)
 
 checkin_btn.pack(side="left", padx=50)
-checkout_btn.pack(side="left", padx=(0,50))
+# checkout_btn.pack(side="left", padx=(0,50))
 
 
 checkin_btn.image = checkin_photo
-checkout_btn.image = checkout_photo
+# checkout_btn.image = checkout_photo
 
 root.mainloop()
