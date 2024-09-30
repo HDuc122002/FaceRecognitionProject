@@ -32,7 +32,7 @@ def login():
 
 def show_admin_menu():
     admin_window = tk.Toplevel(root)
-    admin_window.title("Admin")
+    admin_window.title("Trang quản lý")
 
     frame = tk.Frame(admin_window)
     frame.pack(padx=20, pady=20)
@@ -68,16 +68,14 @@ def show_admin_menu():
 
     admin_window.geometry("500x350")
 
-
 def show_checkin():
     checkin_checkout.show_interface("checkin")
 
 def show_checkout():
     checkin_checkout.show_interface("checkout")
 
-
 root = tk.Tk()
-root.title("Phần mềm chấm công")
+root.title("Face Recognition")
 root.geometry("560x280")
 
 login_image = Image.open("image/login-user.png")
@@ -102,7 +100,6 @@ checkin_btn = tk.Button(frame, image=checkin_photo, text="Checkin", compound="to
 
 checkin_btn.pack(side="left", padx=50)
 # checkout_btn.pack(side="left", padx=(0,50))
-
 
 checkin_btn.image = checkin_photo
 # checkout_btn.image = checkout_photo

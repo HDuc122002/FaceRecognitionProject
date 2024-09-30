@@ -13,11 +13,6 @@ def add_face():
     def submit_name():
         name = name_entry.get()
         if name:
-            existing_user = db.getProfileByName(name)
-            if existing_user:
-                messagebox.showerror("Lỗi", "Người dùng này đã tồn tại.")
-                return
-
             user_id = db.insert(name)
 
             cam = cv2.VideoCapture(0)
@@ -45,10 +40,8 @@ def add_face():
 
             cam.release()
             cv2.destroyAllWindows()
-            print("Đã thêm khuôn mặt thành công!")
-
             train_new_face(user_id)
-        
+            messagebox.showinfo("Thành công","Thêm khuôn mặt người dùng mới thành công")
             add_face_window.destroy()
 
     add_face_window = tk.Toplevel()
@@ -88,26 +81,26 @@ def train_new_face(user_id):
 
 def delete_face():
     def submit_delete():
-        name_or_id = name_entry.get()
+        user_id = name_entry.get()
+        if not user_id.isdigit():
+            messagebox.showerror("Lỗi", "ID người dùng không hợp lệ.")
+            return
+        
+        user_id = int(user_id)
+        delete_data = db.getProfile(user_id)
+
+        if not delete_data:
+                messagebox.showerror("Lỗi", "Người dùng không tồn tại.")
+                return
         try:
-            if name_or_id.isdigit():
-                user_id = int(name_or_id)
-                images = [f for f in os.listdir('dataSet') if f.startswith(f'User.{user_id}.')]
-            else:
-                profile = db.getProfileByName(name_or_id)
-                if profile:
-                    user_id = profile[0]
-                    images = [f for f in os.listdir('dataSet') if f.startswith(f'User.{user_id}.')]
-                else:
-                    messagebox.showerror("Lỗi", "Không tìm thấy người dùng.")
-                    return
+            user_name = delete_data['name'] if 'name' in delete_data else 'Người dùng'
+            images = [f for f in os.listdir('dataSet') if f.startswith(f'User.{user_id}.')]
             
             for image in images:
                 os.remove(os.path.join('dataSet', image))
-            
+                
             db.deleteUser(user_id)
-
-            messagebox.showinfo("Thành công", f"Đã xóa khuôn mặt của người dùng: {name_or_id}")
+            messagebox.showinfo("Thành công", f"Đã xóa khuôn mặt của người dùng: {user_name}")
             delete_face_window.destroy()
         except Exception as e:
             messagebox.showerror("Lỗi", f"Lỗi khi xóa khuôn mặt: {e}")
@@ -115,14 +108,14 @@ def delete_face():
     delete_face_window = tk.Toplevel()
     delete_face_window.title("Xóa Khuôn Mặt")
 
-    name_label = tk.Label(delete_face_window, text="Nhập ID hoặc tên người dùng cần xóa:")
+    name_label = tk.Label(delete_face_window, text="Nhập ID người dùng cần xóa:")
     name_entry = tk.Entry(delete_face_window)
     submit_btn = tk.Button(delete_face_window, text="Xóa", command=submit_delete)
     cancel_btn = tk.Button(delete_face_window, text="Hủy", command=delete_face_window.destroy)
 
     name_label.pack(pady=5)
     name_entry.pack(pady=5)
-    submit_btn.pack(side="left",padx=(55,0),pady=5)
+    submit_btn.pack(side="left",padx=(30,0),pady=5)
     cancel_btn.pack(side="left",padx=(30,0),pady=5)
 
 
@@ -140,12 +133,14 @@ def train_model():
         faces.append(gray)
         ids.append(user_id)
 
+    if not faces or not ids:
+        messagebox.showerror("Lỗi", "Không có dữ liệu huấn luyện")
+        return
+
     recognizer.train(faces, np.array(ids))
 
     recognizer.save('recognizer/trainningData.yml')
-    print("Huấn luyện mô hình thành công!")
-    messagebox.showinfo("Success","Huấn luyện mô hình thành công")
-
+    messagebox.showinfo("Thành công","Huấn luyện mô hình thành công")
 
 def show_people():
     people_data = db.get_people()
