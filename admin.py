@@ -142,15 +142,15 @@ def train_model():
     recognizer.save('recognizer/trainningData.yml')
     messagebox.showinfo("Thành công","Huấn luyện mô hình thành công")
 
-def show_people():
-    people_data = db.get_people()
+def show_users():
+    users_data = db.get_users()
 
-    people_window = tk.Toplevel()
-    people_window.title("Danh Sách Người Dùng")
-    people_window.geometry("600x400")
+    users_window = tk.Toplevel()
+    users_window.title("Danh Sách Người Dùng")
+    users_window.geometry("600x400")
 
     columns = ('ID', 'Tên')
-    tree = ttk.Treeview(people_window, columns=columns, show='headings')
+    tree = ttk.Treeview(users_window, columns=columns, show='headings')
     
     tree.heading('ID', text='ID')
     tree.heading('Tên', text='Tên')
@@ -160,14 +160,14 @@ def show_people():
 
     tree.pack(expand=True, fill='both')
 
-    if not people_data:
-        no_data_label = tk.Label(people_window, text="Không có dữ liệu người dùng.")
+    if not users_data:
+        no_data_label = tk.Label(users_window, text="Không có dữ liệu người dùng.")
         no_data_label.pack()
     else:
-        for entry in people_data:
+        for entry in users_data:
             tree.insert('', tk.END, values=(entry[0], entry[1]))
 
-    tree.bind("<Configure>", lambda e: tree.configure(height=min(len(people_data), 10)))
+    tree.bind("<Configure>", lambda e: tree.configure(height=min(len(users_data), 10)))
 
 def show_history():
     history_data = db.get_history()

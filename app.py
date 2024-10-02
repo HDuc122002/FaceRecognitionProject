@@ -52,7 +52,7 @@ def show_admin_menu():
     delete_btn = tk.Button(frame, text="Xóa khuôn mặt", image=delete_user_photo, compound="top", command=admin.delete_face, width=120, height=120)
     # train_btn = tk.Button(frame, text="Huấn luyện mô hình",image=train_model_photo, compound="top", command=admin.train_model, width=120, height=120)
     # history_btn = tk.Button(frame, text="Lịch sử", image=history_photo, compound="top", command=admin.show_history, width=120, height=120)
-    # list_user_btn = tk.Button(frame, text="Danh sách nhân viên", image=list_user_photo, compound="top", command=admin.show_people, width=120, height=120)
+    # list_user_btn = tk.Button(frame, text="Danh sách nhân viên", image=list_user_photo, compound="top", command=admin.show_users, width=120, height=120)
 
     add_btn.image = add_user_photo
     delete_btn.image = delete_user_photo
